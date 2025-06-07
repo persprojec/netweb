@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ action_name }} Results</title>
+  <style>
+    body { margin:0; padding:0; font-family:'Segoe UI',sans-serif; background:#f0f2f5; color:#333; }
+    .container {
+      max-width: 600px; margin: 60px auto; padding: 24px;
+      background:#fff; border-radius:16px; box-shadow:0 4px 16px rgba(0,0,0,0.1);
+    }
+    h2 { margin-top:0; font-weight:500; }
+    .result-item {
+      border:1px solid #ddd; padding:16px; border-radius:12px;
+      margin-bottom:16px; background:#fafafa;
+    }
+    .btn {
+      display:inline-block; padding:10px 16px; margin-top:8px; font-size:14px;
+      font-weight:500; color:#fff; background:#007bff; border:none;
+      border-radius:25px; cursor:pointer; transition:background .3s;
+    }
+    .btn:hover { background:#0056b3; }
+    code {
+      display:inline-block; background:#e9ecef; padding:4px 8px;
+      margin-right:8px; border-radius:6px; font-family:monospace;
+    }
+    .link-btn { font-size:14px; color:#007bff; text-decoration:none; margin:16px 8px 0; }
+    .no-results { color:#666; }
+  </style>
+  <script>
+    function copyToClipboard(id) {
+      var codeElem = document.getElementById(id);
+      if (!codeElem) return;
+      var text = codeElem.textContent.trim();
+      navigator.clipboard.writeText(text)
+        .then(function(){ alert("Copied: " + text); })
+        .catch(function(err){ alert("Copy failed: " + err); });
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>{{ action_name }} Results</h2>
+
+    {% if results %}
+      {% for r in results %}
+        <div class="result-item">
+          <p>📧 <strong>From:</strong> info@account.netflix.com</p>
+          <p>➤ <strong>To:</strong> {{ r.email_addr }}</p>
+
+          {% if action == 'household' %}
+            <p>
+              📍 Household link:
+              <a href="{{ r.link }}" target="_blank">
+                <button class="btn">Open Link</button>
+              </a>
+            </p>
+          {% elif action == 'signin' %}
+            <p>
+              🔑 Signin code:
+              <code id="code-{{ loop.index0 }}">{{ r.code }}</code>
+              <button class="btn" onclick="copyToClipboard('code-{{ loop.index0 }}')">
+                Copy
+              </button>
+            </p>
+          {% elif action == 'reset' %}
+            <p>
+              🛡️ Reset link:
+              <a href="{{ r.link }}" target="_blank">
+                <button class="btn">Open Link</button>
+              </a>
+            </p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="no-results">No relevant Netflix {{ action_name }} found in the last 15 minutes.</p>
+    {% endif %}
+
+    <form method="get">
+      <button type="submit" class="btn">← Back to Dashboard</button>
+    </form>
+
+    <div style="text-align:center; margin-top:24px;">
+      <a href="{{ contact_seller_url }}" class="link-btn" target="_blank">Contact Seller/Supplier</a>
+      <a href="{{ contact_developer_url }}" class="link-btn" target="_blank">Contact Developer</a>
+    </div>
+  </div>
+</body>
+</html>

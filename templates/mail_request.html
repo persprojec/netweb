@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fetch {{ action_name }}</title>
+  <style>
+    body { margin:0; padding:0; font-family:'Segoe UI',sans-serif; background:#f0f2f5; color:#333; }
+    .container {
+      max-width: 500px; margin: 60px auto; padding: 24px;
+      background:#fff; border-radius:16px; box-shadow:0 4px 16px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    h2 { margin-top:0; font-weight:500; }
+    input[type="email"] {
+      width:100%; padding:12px 16px; font-size:16px;
+      border:1px solid #ccc; border-radius:12px; margin-bottom:16px;
+      box-sizing:border-box; outline:none; transition:border-color .2s;
+    }
+    input[type="email"]:focus { border-color:#007bff; }
+    .btn {
+      display:inline-block; padding:12px 20px; margin:8px 4px 0; font-size:16px;
+      font-weight:500; color:#fff; background:#007bff; border:none;
+      border-radius:25px; cursor:pointer; transition:background .3s;
+      text-decoration:none; text-align:center;
+    }
+    .btn:hover { background:#0056b3; }
+    #loading {
+      display:none; position:absolute; top:0; left:0; width:100%; height:100%;
+      background:rgba(255,255,255,0.8); align-items:center; justify-content:center;
+      border-radius:16px; z-index:10;
+    }
+    .spinner {
+      border:12px solid #f3f3f3; border-top:12px solid #007bff;
+      border-radius:50%; width:80px; height:80px; animation:spin 1s linear infinite;
+    }
+    @keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+    .link-btn { font-size:14px; color:#007bff; text-decoration:none; margin:16px 8px 0; }
+    .errors { color:#d9534f; list-style:none; padding-left:0; margin-top:16px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="loading">
+      <div class="spinner"></div>
+    </div>
+
+    <h2>{{ action_name }}</h2>
+    <form id="fetchForm" method="post">
+      <input type="hidden" name="action" value="{{ action }}">
+      <input
+        type="email"
+        name="email_addr"
+        placeholder="Enter your Netflix email address"
+        required
+      >
+      <br>
+      <!-- Changed Go Back to a simple link -->
+      <a href="/" class="btn">Go Back ⏎</a>
+      <button type="submit" name="go" value="fetch" class="btn">Get</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="errors">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div style="text-align:center; margin-top:24px;">
+      <a href="{{ contact_seller_url }}" class="link-btn" target="_blank">Contact Seller/Supplier</a>
+      <a href="{{ contact_developer_url }}" class="link-btn" target="_blank">Contact Developer</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('fetchForm').addEventListener('submit', function(){
+      document.getElementById('loading').style.display = 'flex';
+    });
+  </script>
+</body>
+</html>

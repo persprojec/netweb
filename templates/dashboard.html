@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+  <style>
+    body { margin:0; padding:0; font-family:'Segoe UI',sans-serif; background:#f0f2f5; color:#333; }
+    .container {
+      max-width: 500px; margin: 60px auto; padding: 24px;
+      background:#fff; border-radius:16px; box-shadow:0 4px 16px rgba(0,0,0,0.1);
+    }
+    h2 { margin-top:0; font-weight:500; }
+    p { line-height:1.5; }
+    .btn { 
+      display:inline-block; width:100%; padding:12px; margin:8px 0;
+      font-size:16px; font-weight:500; color:#fff; background:#007bff;
+      border:none; border-radius:25px; cursor:pointer; transition:background .3s;
+      text-align:center; box-sizing:border-box;
+    }
+    .btn:hover { background:#0056b3; }
+    .logout-btn {
+      background:#6c757d; margin-top:24px;
+    }
+    .logout-btn:hover { background:#5a6268; }
+    .link-btn {
+      font-size:14px; color:#007bff; text-decoration:none; margin:0 8px;
+    }
+    .expired { color:#d9534f; font-weight:500; }
+    .no-access { color:#f0ad4e; font-weight:500; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome, token: {{ token }}</h2>
+    <p>Days remaining: {{ days }} day{{ 's' if days != 1 else '' }}.</p>
+
+    {% if days == 0 %}
+      <p class="expired">
+        Your token has expired. Please contact your supplier to extend your days.
+      </p>
+    {% else %}
+      {% if not (household or signin or reset) %}
+        <p class="no-access">
+          You don’t have any access. Please contact your supplier/seller.
+        </p>
+      {% else %}
+        <h3>Which Netflix mail would you like to retrieve?</h3>
+        <form method="post">
+          {% if household %}
+            <button type="submit" name="action" value="household" class="btn">
+              Household Mail 📍
+            </button>
+          {% endif %}
+          {% if signin %}
+            <button type="submit" name="action" value="signin" class="btn">
+              Signin Code 🔑
+            </button>
+          {% endif %}
+          {% if reset %}
+            <button type="submit" name="action" value="reset" class="btn">
+              Password Reset Link 🛡️
+            </button>
+          {% endif %}
+        </form>
+      {% endif %}
+    {% endif %}
+
+    <form method="post">
+      <button type="submit" name="logout" class="btn logout-btn">
+        Logout
+      </button>
+    </form>
+
+    <div style="text-align:center; margin-top:24px;">
+      <a href="{{ contact_seller_url }}" class="link-btn" target="_blank">Contact Seller/Supplier</a>
+      <a href="{{ contact_developer_url }}" class="link-btn" target="_blank">Contact Developer</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "credentials": [
+    {
+      "mail": "Cachemailspam@gmail.com",
+      "pass": "lonc usmu bglr symp",
+      "users": [
+        {
+          "token": "S1VSHGL9DQ",
+          "days": 1,
+          "household": true,
+          "signin": true,
+          "reset": true
+        },
+        {
+          "token": "LIRLIDF6YS",
+          "days": 1,
+          "household": true,
+          "signin": true,
+          "reset": true
+        },
+        {
+          "token": "S28YP1RGJQ",
+          "days": 30,
+          "household": true,
+          "signin": false,
+          "reset": false
+        }
+      ]
+    }
+  ]
+}
